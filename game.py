@@ -11,7 +11,7 @@ frame.pack()
 snake = Snake(frame)
 Apple(frame)
 
-root.bind('<Key-w>', lambda e: snake.set_direction(Direction.UP))
+root.bind('<Key-w>', lambda e: if snake.direction != Direction.DOWN: snake.set_direction(Direction.UP))
 root.bind('<Key-a>', lambda e: snake.set_direction(Direction.LEFT))
 root.bind('<Key-s>', lambda e: snake.set_direction(Direction.DOWN))
 root.bind('<Key-d>', lambda e: snake.set_direction(Direction.RIGHT))
