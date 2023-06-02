@@ -1,16 +1,20 @@
 from tkinter import *
-from tkinter import ttk
-from enum import Enum
+from apple import Apple
+from direction import Direction
 
-class Snake(Frame):
-    def __init__(self, parent):
+class Snake(list):
+    def __init__(self, master):
         self.direction = Direction.DOWN
         self.speed = 500
-        super().__init__(master=parent, background="lime", width=25, height=25)
-        self.place(x=0, y=0)
+        self.master = master
+        self.grow(master)
+    def grow(self, master):
+        self.append(Frame(master=master, background="lime", width=25, height=25))
     def set_direction(self, direction):
         self.direction = direction
     def move(self):
+        # moves the snake in the current direction
+
         if self.direction == Direction.UP:
             self.place(y=self.winfo_y()-25)
         elif self.direction == Direction.DOWN:
@@ -19,24 +23,13 @@ class Snake(Frame):
             self.place(x=self.winfo_x()-25)
         elif self.direction == Direction.RIGHT:
             self.place(x=self.winfo_x()+25)
-        root.after(snake.speed, snake.move)
 
-class Direction(Enum):
-    UP = 0
-    DOWN = 1
-    LEFT = 2
-    RIGHT = 3
+        # apple detection
 
-root = Tk()
-frame = Frame(root, background="black", width=250, height=250)
-frame.pack()
+        for apple in self.master.winfo_children():
+            if isinstance(apple, Apple) and self.winfo_x() == apple.winfo_x() and self.winfo_y() == apple.winfo_y():
+                apple.place_forget()
+                apple.destroy()
 
-snake = Snake(frame)
+        self.master.after(self.speed, self.move)
 
-root.bind('<Key-w>', lambda e: snake.set_direction(Direction.UP))
-root.bind('<Key-a>', lambda e: snake.set_direction(Direction.LEFT))
-root.bind('<Key-s>', lambda e: snake.set_direction(Direction.DOWN))
-root.bind('<Key-d>', lambda e: snake.set_direction(Direction.RIGHT))
-
-root.after(snake.speed, snake.move)
-root.mainloop()
