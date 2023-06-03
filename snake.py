@@ -1,5 +1,6 @@
 from tkinter import *
 from apple import Apple
+from config import Config
 from direction import Direction
 
 class Snake(list):
@@ -7,12 +8,12 @@ class Snake(list):
         self.direction = Direction.DOWN
         self.speed = 100
         self.master = master
-        front = Frame(master=self.master, background="lime", width=25, height=25)
+        front = Frame(master=self.master, background="lime", width=Config.PIXEL_SIZE, height=Config.PIXEL_SIZE)
         front.grid(row=0, column=0)
         self.append(front)
         self.grow()
     def grow(self):
-        self.append(Frame(master=self.master, background="lime", width=25, height=25))
+        self.append(Frame(master=self.master, background="lime", width=Config.PIXEL_SIZE, height=Config.PIXEL_SIZE))
     def set_direction(self, direction):
         if -direction.value != self.direction.value:
             self.direction = direction
