@@ -23,5 +23,6 @@ root.bind('<Key-a>', lambda e: snake.set_direction(Direction.LEFT))
 root.bind('<Key-s>', lambda e: snake.set_direction(Direction.DOWN))
 root.bind('<Key-d>', lambda e: snake.set_direction(Direction.RIGHT))
 
-frame.after(snake.speed, snake.move)
+snake.start()
 root.mainloop()
+ 

@@ -1,5 +1,5 @@
 class Config:
-    GRID_ROWS = 25
-    GRID_COLUMNS = 25
-    PIXEL_SIZE = 10
+    GRID_ROWS = 10
+    GRID_COLUMNS = 10
+    PIXEL_SIZE = 50
     

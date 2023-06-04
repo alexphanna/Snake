@@ -6,36 +6,61 @@ from direction import Direction
 class Snake(list):
     def __init__(self, master):
         self.direction = Direction.DOWN
-        self.speed = 100
+        self.speed = 100         
+        self.moved = False
+        self.alive = True
         self.master = master
         front = Frame(master=self.master, background="lime", width=Config.PIXEL_SIZE, height=Config.PIXEL_SIZE)
-        front.grid(row=0, column=0)
+        front.grid(row=1, column=1)
         self.append(front)
         self.grow()
     def grow(self):
         self.append(Frame(master=self.master, background="lime", width=Config.PIXEL_SIZE, height=Config.PIXEL_SIZE))
     def set_direction(self, direction):
-        if -direction.value != self.direction.value:
+        if -direction.value != self.direction.value and direction.value != self.direction.value:
+            if self.moved is False:
+                self.move()
             self.direction = direction
+            self.moved = False
     def move(self):
         if self.direction == Direction.UP or self.direction == Direction.DOWN:
-            self[0].grid(row = self[0].grid_info()['row'] + (int)(self.direction.value / abs(self.direction.value)))
+            row = self[0].grid_info()['row'] + (int)(self.direction.value / abs(self.direction.value))
+            for frame in self.master.winfo_children():
+                if frame.grid_info()['row'] == row and frame.grid_info()['column'] == self[0].grid_info()['column']:
+                    if isinstance(frame, Apple):
+                        frame.grid_remove()
+                        Apple(self.master)
+                    else:
+                        self.alive = False
+            if row == Config.GRID_ROWS:
+                self[0].grid(row = 0)
+            elif row == -1:
+                self[0].grid(row = Config.GRID_ROWS - 1)
+            else:
+                self[0].grid(row = row)
         elif self.direction == Direction.RIGHT or self.direction == Direction.LEFT:
-            self[0].grid(column = self[0].grid_info()['column'] + (int)(self.direction.value / abs(self.direction.value)))
+            column = self[0].grid_info()['column'] + (int)(self.direction.value / abs(self.direction.value))
+            for frame in self.master.winfo_children():
+                if frame.grid_info()['column'] == column and frame.grid_info()['row'] == self[0].grid_info()['row']:
+                    if isinstance(frame, Apple):
+                        frame.grid_remove()
+                        Apple(self.master)
+                    else:
+                        self.alive = False
+            if column == Config.GRID_COLUMNS:
+                self[0].grid(column = 0)
+            elif column == -1:
+                self[0].grid(column = Config.GRID_COLUMNS - 1)
+            else:
+                self[0].grid(column = column)
 
         index = len(self) - 1
         while index > 0:
             self[index].grid(row = self[index - 1].grid_info()['row'], column = self[index - 1].grid_info()['column'])
             index -= 1
 
-        for apple in self.master.winfo_children():
-            if isinstance(apple, Apple):
-                for snake in self:
-                    if snake.grid_info() == apple.grid_info():
-                        apple.place_forget()
-                        apple.grid_remove()
-                        self.grow()
-                        Apple(self.master)
-                        break
-
-        self.master.after(self.speed, self.move)
+        self.moved = True
+    def start(self):
+        if self.alive:
+            self.move()
+            self.master.after(self.speed, self.start)
