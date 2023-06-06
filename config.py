@@ -1,5 +1,7 @@
-class Config:
-    GRID_ROWS = 10
-    GRID_COLUMNS = 10
-    PIXEL_SIZE = 50
+config = {
+    "grid_rows": 25,
+    "grid_columns": 25,
+    "pixel_size": 25,
+    "god_mode": True
+}
     

@@ -1,19 +1,18 @@
 from tkinter import *
-from tkinter import ttk
 from apple import Apple
-from config import Config
+from config import config
 from direction import Direction
 from snake import Snake
 
 root = Tk()
-frame = Frame(root, background="black", width=Config.GRID_COLUMNS * Config.PIXEL_SIZE, height=Config.GRID_ROWS * Config.PIXEL_SIZE)
+frame = Frame(root, background="black", width=config["grid_columns"] * config["pixel_size"], height=config["grid_rows"] * config["pixel_size"])
 frame.pack()
 frame.grid_propagate(FALSE)
 
-for row in range(Config.GRID_COLUMNS):
-    frame.rowconfigure(row, minsize=Config.PIXEL_SIZE, weight=1)
-for column in range(Config.GRID_ROWS):
-    frame.columnconfigure(column, minsize=Config.PIXEL_SIZE, weight=1)
+for row in range(config["grid_columns"]):
+    frame.rowconfigure(row, minsize=config["pixel_size"], weight=1)
+for column in range(config["grid_rows"]):
+    frame.columnconfigure(column, minsize=config["pixel_size"], weight=1)
 
 snake = Snake(frame)
 Apple(frame)
